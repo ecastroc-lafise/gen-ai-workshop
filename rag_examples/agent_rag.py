@@ -2,7 +2,7 @@ import boto3
 import random
 
 
-AGENT_ID = "INSERT_AGENT_ID"
+AGENT_ID = "HELLQOTT9R"
 QUERY = "What are some features of Amazon S3?"
 REGION = "us-west-2"
 

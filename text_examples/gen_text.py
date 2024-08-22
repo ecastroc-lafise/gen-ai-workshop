@@ -92,7 +92,19 @@ def sentiment_analysis(text):
     Function to return a JSON object of sentiment from a given text.
     """
     # TODO Can you fill in the function?
-    result = None
+
+    model_id = "meta.llama3-70b-instruct-v1:0"
+    # Setup the system prompts and messages to send to the model.
+    system_prompts = [
+        {"text": "You are an app that analyzes sentiment in a JSON format."}
+    ]
+    message_1 = {
+        "role": "user",
+        "content": [{"text": f"Analyze the sentiment of the following text: {text}."}],
+    }
+    messages = [message_1]
+
+    result = generate_conversation(model_id, system_prompts, messages)
     return result
 
 
@@ -101,7 +113,19 @@ def perform_qa(question, text):
     Function to perform a Q&A operation based on the provided text.
     """
     # TODO Can you fill in the function?
-    result = None
+    model_id = "meta.llama3-70b-instruct-v1:0"
+    # Setup the system prompts and messages to send to the model.
+    system_prompts = [
+        {"text": "You are an app that provides answers based on provided text."}
+    ]
+    message_1 = {
+        "role": "user",
+        "content": [
+            {"text": f"Given the following text: {text} answer the question: {question}"}
+        ],
+    }
+    messages = [message_1]
+    result = generate_conversation(model_id, system_prompts, messages)
     return result
 
 

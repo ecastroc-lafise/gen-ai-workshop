@@ -1,4 +1,7 @@
 import json
+import base64
+from PIL import Image
+from io import BytesIO
 
 import boto3
 import streamlit as st
@@ -36,6 +39,10 @@ bedrock_runtime = boto3.client(
     region_name=REGION,
 )
 
+def base64_to_pil(base64_str):
+    image_data = base64.b64decode(base64_str)
+    pil_image = Image.open(BytesIO(image_data))
+    return pil_image
 
 # Bedrock api call to stable diffusion
 def generate_image_sd(text, style):
@@ -112,3 +119,23 @@ def generate_image_titan(text):
 
 
 model = st.selectbox("Select model", ["Amazon Titan", "Stable Diffusion"])
+# Get user prompt
+prompt = st.text_input("Enter your prompt")
+
+# Get style if Stable Diffusion is selected
+if model == "Stable Diffusion":
+    style = st.selectbox("Select Style", sd_presets)
+else:
+    style = None
+
+# Generate image
+if st.button("Generate Image"):
+    if model == "Amazon Titan":
+        image_base64 = generate_image_titan(prompt)
+    else:
+        image_base64 = generate_image_sd(prompt, style)
+
+    # Display generated image
+    if image_base64:
+        image = base64_to_pil(image_base64)
+        st.image(image)

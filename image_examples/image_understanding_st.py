@@ -67,12 +67,32 @@ def pil_to_base64(image, format="png"):
 user_image = st.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
 
 # Creat two columns, one to show the uploaded image, another for the new image
+from io import BytesIO
+import base64
 col1, col2 = st.columns(2)
 
 # Show the uploaded image
 if user_image is not None:
     user_image = Image.open(user_image)
-    # TODO Finish App with Q
+    col1.image(user_image, caption="Uploaded Image", use_column_width=True)
+    
+    # Add button to describe the image
+    if col2.button("Describe Image"):
+        # Convert image to base64
+        buffered = BytesIO()
+        user_image.save(buffered, format="PNG")
+        img_str = base64.b64encode(buffered.getvalue()).decode()
+        
+        # Call the image description function
+        description = call_claude_sonnet(img_str)
+        col2.write(description)
+        # Encode the image to base64
+        buffered = BytesIO()
+        user_image.save(buffered, format="PNG")
+        img_str = base64.b64encode(buffered.getvalue()).decode()
+        # Call the image description function
+        description = call_claude_sonnet(img_str)
+        col2.write(description)
 
 else:
     col2.write("No image uploaded")

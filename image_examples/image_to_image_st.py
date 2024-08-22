@@ -147,7 +147,10 @@ st.subheader("Image Generation Demo - Image to Image")
 model = st.selectbox("Select model", ["Amazon Titan", "Stable Diffusion"])
 
 # TODO insert your comments
-
+# Add a file uploader for images
+user_image = st.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
+# Get user prompt to change the image
+change_prompt = st.text_input("Enter a prompt to change the image")
 
 col1, col2 = st.columns(2)  # Column 1 for input image, Column 2 for output image
 
